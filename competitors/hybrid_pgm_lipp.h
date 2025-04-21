@@ -9,7 +9,7 @@ template<class KeyType, class SearchClass, size_t pgm_error>
 class HybridPGMLIPP : public Competitor<KeyType, SearchClass> {
 public:
     HybridPGMLIPP(const std::vector<int>& params)
-        : dp_index_(params), lipp_index_(params), insert_count_(0), flush_threshold_(100000) {} // threshold is tunable
+        : dp_index_(params), lipp_index_(params), insert_count_(0), flush_threshold_(1000000) {} // threshold is tunable
 
     uint64_t Build(const std::vector<KeyValue<KeyType>>& data, size_t num_threads) {
         // Build only LIPP from the initial dataset
