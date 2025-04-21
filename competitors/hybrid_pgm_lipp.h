@@ -41,7 +41,7 @@ public:
         }
     }
 
-    std::string name() const override {
+    std::string name() const {
         return "HybridPGMLIPP";
     }
 
