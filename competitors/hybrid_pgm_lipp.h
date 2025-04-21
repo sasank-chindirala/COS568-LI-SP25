@@ -25,7 +25,6 @@ public:
     }
 
     uint64_t RangeQuery(const KeyType& lower_key, const KeyType& upper_key, uint32_t thread_id) const {
-        // Optionally support range queries (not required)
         return dp_index_.RangeQuery(lower_key, upper_key, thread_id) +
                lipp_index_.RangeQuery(lower_key, upper_key, thread_id);
     }
@@ -35,7 +34,6 @@ public:
         insert_buffer_.emplace_back(data);
         insert_count_++;
 
-        // Flush if threshold reached
         if (insert_count_ >= flush_threshold_) {
             flush_to_lipp(thread_id);
         }
@@ -45,25 +43,24 @@ public:
         return "HybridPGMLIPP";
     }
 
-    std::vector<std::string> variants() const override {
+    std::vector<std::string> variants() const {
         std::vector<std::string> vec;
         vec.push_back(SearchClass::name());
         vec.push_back(std::to_string(pgm_error));
         return vec;
     }
 
-    size_t size() const override {
+    size_t size() const {
         return dp_index_.size() + lipp_index_.size();
     }
 
     bool applicable(bool unique, bool range_query, bool insert, bool multithread,
-                    const std::string& ops_filename) const override {
+                    const std::string& ops_filename) const {
         return !multithread;
     }
 
 private:
     void flush_to_lipp(uint32_t thread_id) {
-        // Insert everything in the buffer into LIPP (one by one)
         for (const auto& kv : insert_buffer_) {
             lipp_index_.Insert(kv, thread_id);
         }
