@@ -65,6 +65,7 @@ private:
             lipp_index_.Insert(kv, thread_id);
         }
         insert_buffer_.clear();
+        dp_index_ = DynamicPGM<KeyType, SearchClass, pgm_error>(std::vector<int>());
         insert_count_ = 0;
     }
 
